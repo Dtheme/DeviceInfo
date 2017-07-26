@@ -1,4 +1,4 @@
-# DeviceInfo readme.md
+# DeviceInfo 
 Get Apple device Infomation
 
 ##获取apple设备的设备信息
