@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-
+#import "DeviceInfo.h"
 @interface ViewController ()
 
 @end
@@ -16,7 +16,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    NSLog(@"deviceInfo-->%@",[DeviceInfo deviceInfo]);
+    NSLog(@"executablePathMD5-->%@",[DeviceInfo executablePathAndMD5Value]);
+    NSLog(@"isJailBrojen-->%d",[DeviceInfo isJailBrojen]);
+    NSLog(@"MacAddress-->%@",[DeviceInfo getMacAddress]);
 }
 
 
