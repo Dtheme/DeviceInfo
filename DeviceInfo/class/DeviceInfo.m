@@ -186,7 +186,7 @@ static const char* jailbreak_apps[] =
 //    }
     
     NSString *OSVersion = [NSString stringWithFormat:@"%@ %@",[[UIDevice currentDevice] systemName],[[UIDevice currentDevice] systemVersion]];
-    [dic setObject:deviceType forKey:@"DeviceType"];//0：手机 1：平板 2：电视 3：其他
+    [dic setObject:deviceType forKey:@"DeviceType"];
     [dic setObject:OSVersion forKey:@"DeviceOsType"];
     [dic setObject:[self getMacAddress] forKey:@"DeviceMac"];
     [dic setObject:[UIDevice currentDevice].model forKey:@"DeviceModel"];
