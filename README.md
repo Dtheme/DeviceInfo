@@ -4,7 +4,7 @@ Get Apple device Infomation
 ##获取apple设备的设备信息
 
 
-这个类是对常用的UIDevice方法封装，获取了一常用的设备信息
+这个类是对常用的UIDevice方法封装，获取了一些常用的设备信息
 
 ### 包含的方法
 
