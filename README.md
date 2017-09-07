@@ -1,4 +1,5 @@
 # DeviceInfo 
+
 Get Apple device Infomation
 
 ##获取apple设备的设备信息
@@ -47,3 +48,5 @@ Get Apple device Infomation
  NSLog(@"MacAddress-->%@",[DeviceInfo getMacAddress]);
 ```
 
+###License
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()
