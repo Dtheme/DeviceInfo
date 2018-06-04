@@ -13,14 +13,7 @@ Get Apple device Infomation
 
 `+ (NSDictionary *)deviceInfo;`
 
-返回一个字典
-
-*  DeviceMac  mac地址
-*  DeviceType 设备类型
-*  DeviceMetrics 分辨率
-*  DeviceModel 设备型号
-*  DeviceOsType 系统版本
-*  CPUArchitecture CPU架构
+返回一个字典，包含本类中提供的方法的所有值
 
 `+ (NSArray *)executablePathAndMD5Value;`
 
@@ -33,6 +26,30 @@ Get Apple device Infomation
 `+ (NSString *)getMacAddress;`
 
 获取设备的Mac地址
+
+`+ (NSString *)getDeviceIPAdress;`
+
+获取设备当前IP
+
+`+ (NSString *)getDeviceLanguage;`
+
+获取当前设备的语言环境
+
+`+ (NSString *) getBatteryState;`
+
+获取当前的电池状态
+
+`+ (CGFloat)getBatteryLevel;`
+
+获取当前的电池电量
+
+`+ (NSString *)getApplicationName;`
+
+app名称
+
++ (NSString*) getLocalAppVersion;
+
+获取app版本号
 
 ### 使用
 
