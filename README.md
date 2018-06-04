@@ -2,7 +2,7 @@
 
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()
 
-Get Apple device Infomation
+Get iOS device Infomation
 
 ##获取apple设备的设备信息
 
