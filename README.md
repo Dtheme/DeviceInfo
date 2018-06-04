@@ -47,7 +47,7 @@ Get Apple device Infomation
 
 app名称
 
-+ (NSString*) getLocalAppVersion;
+`+ (NSString*) getLocalAppVersion;`
 
 获取app版本号
 
