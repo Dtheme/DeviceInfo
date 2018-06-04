@@ -11,15 +11,8 @@
 @interface DeviceInfo : NSObject
 
 
-/**
- DeviceMac  mac地址
- DeviceType 设备类型
- DeviceMetrics 分辨率
- DeviceModel 设备型号
- DeviceOsType 系统版本
- CPUArchitecture CPU架构
- @return NSDictionary contain above-mentioned
- */
+
+// 返回本类提供的所有设备信息
 + (NSDictionary *)deviceInfo;
 
 
