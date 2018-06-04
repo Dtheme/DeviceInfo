@@ -13,12 +13,18 @@
 #import <net/if.h>
 #import <net/if_dl.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <objc/runtime.h>
+#import <ifaddrs.h>
+#import <netinet/in.h>
+#import <arpa/inet.h>
 
 @interface DeviceInfo ()
 @property (nonatomic, strong) NSMutableArray *array;
 @end
 
 #define IPHONE5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define iPhoneX (812 == [[UIScreen mainScreen] bounds].size.height ? YES : NO)
 
 @interface DeviceInfo()
 {
@@ -181,10 +187,6 @@ static const char* jailbreak_apps[] =
     NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
     NSString *deviceType = [DeviceInfo deviceTypeDetail];
 
-//    if (TARGET_IPHONE_SIMULATOR) {
-//        deviceType = @"iPhone Simulator";
-//    }
-    
     NSString *OSVersion = [NSString stringWithFormat:@"%@ %@",[[UIDevice currentDevice] systemName],[[UIDevice currentDevice] systemVersion]];
     [dic setObject:deviceType forKey:@"DeviceType"];
     [dic setObject:OSVersion forKey:@"DeviceOsType"];
@@ -192,6 +194,12 @@ static const char* jailbreak_apps[] =
     [dic setObject:[UIDevice currentDevice].model forKey:@"DeviceModel"];
     [dic setObject:[self getDeviceDisplayMetrics] forKey:@"DeviceMetrics"];
     [dic setObject:[DeviceInfo cpuArchitectures] forKey:@"CPUArchitecture"];
+    [dic setObject:[DeviceInfo getBundleID] forKey:@"BundleID"];
+    [dic setObject:[DeviceInfo getLocalAppVersion] forKey:@"AppVersion"];
+    [dic setObject:[DeviceInfo getApplicationName] forKey:@"AppName"];
+    [dic setObject:[DeviceInfo getDeviceIPAdress] forKey:@"IP"];
+    [dic setObject:@([DeviceInfo getBatteryLevel]) forKey:@"BatteryLevel"];
+    [dic setObject:[DeviceInfo getBatteryState] forKey:@"BatteryState"];
     return dic;
 }
 
@@ -201,6 +209,9 @@ static const char* jailbreak_apps[] =
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (IPHONE5) {
             DisplayMetrics=@"1136*640";
+        }
+        if (iPhoneX) {
+            DisplayMetrics = @"2436*1125";
         }
         if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
             ([UIScreen mainScreen].scale == 2.0)) {
@@ -231,29 +242,24 @@ static const char* jailbreak_apps[] =
     NSString            *errorFlag = NULL;
     NSString            *macAddressString = nil;
     
-    // Setup the management Information Base (mib)
     mgmtInfoBase[0] = CTL_NET;        // Request network subsystem
     mgmtInfoBase[1] = AF_ROUTE;       // Routing table info
     mgmtInfoBase[2] = 0;
     mgmtInfoBase[3] = AF_LINK;        // Request link layer information
     mgmtInfoBase[4] = NET_RT_IFLIST;  // Request all configured interfaces
     
-    // With all configured interfaces requested, get handle index
     if ((mgmtInfoBase[5] = if_nametoindex("en0")) == 0)
         errorFlag = @"if_nametoindex failure";
     else
     {
-        // Get the size of the data available (store in len)
         if (sysctl(mgmtInfoBase, 6, NULL, &length, NULL, 0) < 0)
             errorFlag = @"sysctl mgmtInfoBase failure";
         else
         {
-            // Alloc memory based on above call
             if ((msgBuffer = malloc(length)) == NULL)
                 errorFlag = @"buffer allocation failure";
             else
             {
-                // Get system information, store in buffer
                 if (sysctl(mgmtInfoBase, 6, msgBuffer, &length, NULL, 0) < 0)
                     errorFlag = @"sysctl msgBuffer failure";
             }
@@ -263,10 +269,6 @@ static const char* jailbreak_apps[] =
     // Befor going any further...
     if (errorFlag != NULL)
     {
-        //DebugLog(@"Error: %@", errorFlag);
-        
-        //修改 by liangSuhua 2014.1.17
-        //return errorFlag;
         macAddressString = nil;
         
         // Release the buffer memory
@@ -274,21 +276,16 @@ static const char* jailbreak_apps[] =
     }
     else
     {
-        // Map msgbuffer to interface message structure
         interfaceMsgStruct = (struct if_msghdr *) msgBuffer;
-        
-        // Map to link-level socket structure
+
         socketStruct = (struct sockaddr_dl *) (interfaceMsgStruct + 1);
-        
-        // Copy link layer address data in socket structure to an array
+
         memcpy(&macAddress, socketStruct->sdl_data + socketStruct->sdl_nlen, 6);
-        
-        // Read from char array into a string object, into traditional Mac address format
+
         macAddressString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
                             macAddress[0], macAddress[1], macAddress[2],
                             macAddress[3], macAddress[4], macAddress[5]];
         
-        // Release the buffer memory
         free(msgBuffer);
     }
     
@@ -304,8 +301,7 @@ static const char* jailbreak_apps[] =
     {
         if(macAddressString == nil || [macAddressString isEqualToString:@""])
         {
-            //iOS6也可以获取UUIDString
-            //96FEADAA-884B-405A-A382-9E275FC15580
+
             NSString *UUIDString = [[[UIDevice currentDevice]identifierForVendor]UUIDString];
             if(UUIDString != nil && ![UUIDString isEqualToString:@""])
                 return [UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
@@ -367,14 +363,12 @@ static const char* jailbreak_apps[] =
     if ([deviceString isEqualToString:@"iPhone9,2"]) return @"iPhone 7 Plus";
     if ([deviceString isEqualToString:@"iPhone9,3"]) return @"iPhone 7";
     if ([deviceString isEqualToString:@"iPhone9,4"]) return @"iPhone 7 Plus";
-    
-    //iPod
-    
-    //    　　if ([deviceString isEqualToString:@"iPod1,1"]) return @"iPod Touch 1G";
-    //    　　if ([deviceString isEqualToString:@"iPod2,1"]) return @"iPod Touch 2G";
-    //    　　if ([deviceString isEqualToString:@"iPod3,1"]) return @"iPod Touch 3G";
-    //    　　if ([deviceString isEqualToString:@"iPod4,1"]) return @"iPod Touch 4G";
-    //    　　if ([deviceString isEqualToString:@"iPod5,1"]) return @"iPod Touch 5G"; return @"iPod Touch 5G";
+    if ([deviceString isEqualToString:@"iPhone10,1"]) return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,2"]) return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,3"]) return @"iPhone X";
+    if ([deviceString isEqualToString:@"iPhone10,4"]) return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,5"]) return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,6"]) return @"iPhone X";
     
     //iPad
     if ([deviceString isEqualToString:@"iPad1,1"])      return @"iPad";
@@ -573,6 +567,146 @@ static const char* jailbreak_apps[] =
         }
         
     }
+}
+
++ (NSString *)getDeviceIPAdress {
+    
+    NSString *address = @"an error occurred when obtaining ip address";
+    
+    struct ifaddrs *interfaces = NULL;
+    
+    struct ifaddrs *temp_addr = NULL;
+    
+    int success = 0;
+    
+    
+    
+    success = getifaddrs(&interfaces);
+    
+    
+    
+    if (success == 0) { // 0 表示获取成功
+        
+        
+        
+        temp_addr = interfaces;
+        
+        while (temp_addr != NULL) {
+            
+            if( temp_addr->ifa_addr->sa_family == AF_INET) {
+                
+                // Check if interface is en0 which is the wifi connection on the iPhone
+                
+                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+                    
+                    // Get NSString from C String
+                    
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    
+    freeifaddrs(interfaces);
+    
+    return address;
+}
+
++(NSString*)getLocalAppVersion{
+    
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+}
+
++(NSString*)getApplicationName{
+    
+    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    
+    NSMutableString *mutableAppName = [NSMutableString stringWithString:appName];
+    return [mutableAppName copy];
+}
+
++(NSString*)getBundleID{
+    
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    
+}
+
+
++ (CGFloat)getBatteryLevel {
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    if (app.applicationState == UIApplicationStateActive||app.applicationState==UIApplicationStateInactive) {
+        
+        Ivar ivar=  class_getInstanceVariable([app class],"_statusBar");
+        
+        id status  = object_getIvar(app, ivar);
+        
+        for (id aview in [status subviews]) {
+            
+            int batteryLevel = 0;
+            
+            for (id bview in [aview subviews]) {
+                
+                if ([NSStringFromClass([bview class]) caseInsensitiveCompare:@"UIStatusBarBatteryItemView"] == NSOrderedSame&&[[[UIDevice currentDevice] systemVersion] floatValue] >=6.0) {
+                    
+                    Ivar ivar=  class_getInstanceVariable([bview class],"_capacity");
+                    
+                    if(ivar) {
+                        
+                        batteryLevel = ((int (*)(id, Ivar))object_getIvar)(bview, ivar);
+                        
+                        if (batteryLevel > 0 && batteryLevel <= 100) {
+                            
+                            return batteryLevel;
+                            
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+    
+}
+
++ (NSString *) getBatteryState {
+    
+    UIDevice *device = [UIDevice currentDevice];
+    
+    if (device.batteryState == UIDeviceBatteryStateUnknown) {
+        
+        return @"UnKnow";
+        
+    } else if (device.batteryState == UIDeviceBatteryStateUnplugged){
+        
+        return @"Unplugged";
+        
+    } else if (device.batteryState == UIDeviceBatteryStateCharging){
+        
+        return @"Charging";
+        
+    } else if (device.batteryState == UIDeviceBatteryStateFull){
+        
+        return @"Full";
+        
+    }
+    
+    return nil;
+    
+}
+
+
++ (NSString *)getDeviceLanguage {
+    
+    NSArray *languageArray = [NSLocale preferredLanguages];
+    
+    return [languageArray objectAtIndex:0];
+    
 }
 
 @end

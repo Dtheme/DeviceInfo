@@ -49,5 +49,55 @@
 //- (NSString*)getMainBundleMD5WithFlag:(NSInteger)flag;
 
 
+/**
+ 获取App名称
+
+ @return app名称
+ */
++ (NSString *)getApplicationName;
+
+/**
+ 获取app版本号
+
+ @return app版本号
+ */
++ (NSString*) getLocalAppVersion;
+
+/**
+ 获取BundleID
+
+ @return bundle ID
+ */
++ (NSString*)getBundleID;
+
+
+/**
+ 获取设备当前IP
+
+ @return  获取设备当前IP
+ */
++ (NSString *)getDeviceIPAdress;
+
+/**
+ 电池电量
+
+ @return 电池电量
+ */
++ (CGFloat)getBatteryLevel;
+
+
+/**
+ 电池状态
+
+ @return 电池状态
+ */
++ (NSString *) getBatteryState;
+
+/**
+ 当期设备语言
+
+ @return 当前设备语言
+ */
++ (NSString *)getDeviceLanguage;
 
 @end
