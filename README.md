@@ -1,7 +1,4 @@
 # DeviceInfo 
-
-![](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)
-
 Get iOS device Infomation
 
 ##获取iOS设备的设备信息
