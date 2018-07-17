@@ -1,6 +1,6 @@
 # DeviceInfo 
 
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()
+![](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)
 
 Get iOS device Infomation
 
