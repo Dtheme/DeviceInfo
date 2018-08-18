@@ -1,10 +1,12 @@
 # DeviceInfo 
-Get iOS device Infomation
+
 
 ##获取iOS设备的设备信息
 
+ Get iOS device Infomation,This utility class is used to obtain some common device information.
 
-这个类是对常用的UIDevice方法封装，获取了一些常用的设备信息
+
+这个工具类是封装了一些常用方法，用于获取了一些常用的iOS设备信息。
 
 ### 包含的方法
 
@@ -17,7 +19,7 @@ Get iOS device Infomation
 返回一个数组，index0是executablePath，index1是它的MD5加密值
 
 `+ (BOOL)isJailBrojen;`
-  
+
 判断是否为越狱设备
 
 `+ (NSString *)getMacAddress;`
