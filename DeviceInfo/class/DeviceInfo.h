@@ -31,7 +31,7 @@
 
  @return 是否越狱
  */
-+ (BOOL)isJailBrojen;
++ (BOOL)isJailBroken;
 
 /**
  获取设备Mac地址
