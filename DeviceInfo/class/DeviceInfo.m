@@ -24,7 +24,6 @@
 
 #define IPHONE5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
 
-#define iPhoneX (812 == [[UIScreen mainScreen] bounds].size.height ? YES : NO)
 
 @interface DeviceInfo()
 {
@@ -210,7 +209,7 @@ static const char* jailbreak_apps[] =
         if (IPHONE5) {
             DisplayMetrics=@"1136*640";
         }
-        if (iPhoneX) {
+        if ([DeviceInfo iPhoneX]) {
             DisplayMetrics = @"2436*1125";
         }
         if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
@@ -422,6 +421,18 @@ static const char* jailbreak_apps[] =
 }
 
 
+//为了做iPhoneX 适配 无论是模拟器还是真机 都会判断出iPhone X 不影响上面方法
++ (BOOL)iPhoneX {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
+    if ([platform isEqualToString:@"i386"] || [platform isEqualToString:@"x86_64"]) {
+        return (CGSizeEqualToSize([UIScreen mainScreen].bounds.size, CGSizeMake(375, 812)) ||
+                CGSizeEqualToSize([UIScreen mainScreen].bounds.size, CGSizeMake(812, 375)));
+    }
+    BOOL isIPhoneX = [platform isEqualToString:@"iPhone10,3"] || [platform isEqualToString:@"iPhone10,6"];
+    return isIPhoneX;
+}
 +(NSDictionary *)appVersionInfo
 {
     
@@ -626,7 +637,7 @@ static const char* jailbreak_apps[] =
 
 +(NSString*)getApplicationName{
     
-    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
     
     NSMutableString *mutableAppName = [NSMutableString stringWithString:appName];
     return [mutableAppName copy];
@@ -705,6 +716,7 @@ static const char* jailbreak_apps[] =
     
 }
 
+// 具体如何根据返回的字符串判断 可以参考这篇博客 http://www.cnblogs.com/bingxue314159/p/5381947.html
 + (NSString *)getDeviceLanguage {
     
     NSArray *languageArray = [NSLocale preferredLanguages];
