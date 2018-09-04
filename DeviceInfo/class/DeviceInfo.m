@@ -77,7 +77,7 @@ static const char* jailbreak_apps[] =
         
         CC_MD5_Update(&md5, [fileData bytes], (CC_LONG)[fileData length]);
         if([fileData length]==0)
-            done=YES;
+        done=YES;
         
         i++;
     }
@@ -126,7 +126,7 @@ static const char* jailbreak_apps[] =
         NSData *fileData=[hanle readDataOfLength:1024];
         CC_MD5_Update(&md5, [fileData bytes], (CC_LONG)[fileData length]);
         if([fileData length]==0)
-            done=YES;
+        done=YES;
     }
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5_Final(digest, &md5);
@@ -151,13 +151,13 @@ static const char* jailbreak_apps[] =
     NSString * appPath = [[NSBundle mainBundle] executablePath];
     NSString* md5 = [DeviceInfo fileMD5:appPath];
     if(nil == md5)
-        md5 = @"";
+    md5 = @"";
     NSMutableArray *arr = [[NSMutableArray alloc]initWithObjects:appPath, md5,nil];
     return [NSArray arrayWithArray:arr];
 }
 
 //越狱
-+(BOOL)isJailBrojen
++(BOOL)isJailBroken
 {
     for(int i = 0; jailbreak_apps[i] != NULL; ++i)
     {
@@ -186,7 +186,7 @@ static const char* jailbreak_apps[] =
 {
     NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
     NSString *deviceType = [DeviceInfo deviceTypeDetail];
-
+    
     NSString *OSVersion = [NSString stringWithFormat:@"%@ %@",[[UIDevice currentDevice] systemName],[[UIDevice currentDevice] systemVersion]];
     [dic setObject:deviceType forKey:@"DeviceType"];
     [dic setObject:OSVersion forKey:@"DeviceOsType"];
@@ -249,19 +249,19 @@ static const char* jailbreak_apps[] =
     mgmtInfoBase[4] = NET_RT_IFLIST;  // Request all configured interfaces
     
     if ((mgmtInfoBase[5] = if_nametoindex("en0")) == 0)
-        errorFlag = @"if_nametoindex failure";
+    errorFlag = @"if_nametoindex failure";
     else
     {
         if (sysctl(mgmtInfoBase, 6, NULL, &length, NULL, 0) < 0)
-            errorFlag = @"sysctl mgmtInfoBase failure";
+        errorFlag = @"sysctl mgmtInfoBase failure";
         else
         {
             if ((msgBuffer = malloc(length)) == NULL)
-                errorFlag = @"buffer allocation failure";
+            errorFlag = @"buffer allocation failure";
             else
             {
                 if (sysctl(mgmtInfoBase, 6, msgBuffer, &length, NULL, 0) < 0)
-                    errorFlag = @"sysctl msgBuffer failure";
+                errorFlag = @"sysctl msgBuffer failure";
             }
         }
     }
@@ -277,11 +277,11 @@ static const char* jailbreak_apps[] =
     else
     {
         interfaceMsgStruct = (struct if_msghdr *) msgBuffer;
-
+        
         socketStruct = (struct sockaddr_dl *) (interfaceMsgStruct + 1);
-
+        
         memcpy(&macAddress, socketStruct->sdl_data + socketStruct->sdl_nlen, 6);
-
+        
         macAddressString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
                             macAddress[0], macAddress[1], macAddress[2],
                             macAddress[3], macAddress[4], macAddress[5]];
@@ -293,7 +293,7 @@ static const char* jailbreak_apps[] =
     if ([[[UIDevice currentDevice] systemVersion]intValue]<6)
     {
         if(macAddressString == nil || [macAddressString isEqualToString:@""])
-            return @"000000000000";
+        return @"000000000000";
         
         return macAddressString;
     }
@@ -301,12 +301,12 @@ static const char* jailbreak_apps[] =
     {
         if(macAddressString == nil || [macAddressString isEqualToString:@""])
         {
-
+            
             NSString *UUIDString = [[[UIDevice currentDevice]identifierForVendor]UUIDString];
             if(UUIDString != nil && ![UUIDString isEqualToString:@""])
-                return [UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            return [UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
             else
-                return @"000000000000";
+            return @"000000000000";
             
         }
         else
@@ -321,9 +321,9 @@ static const char* jailbreak_apps[] =
         //96FEADAA-884B-405A-A382-9E275FC15580
         NSString *UUIDString = [[[UIDevice currentDevice]identifierForVendor]UUIDString];
         if(UUIDString != nil && ![UUIDString isEqualToString:@""])
-            return [UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        return [UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
         else
-            return @"000000000000";
+        return @"000000000000";
     }
 }
 
@@ -358,17 +358,17 @@ static const char* jailbreak_apps[] =
     if ([deviceString isEqualToString:@"iPhone7,2"])    return @"iPhone 6";
     if ([deviceString isEqualToString:@"iPhone8,1"])    return @"iPhone 6s";
     if ([deviceString isEqualToString:@"iPhone8,2"])    return @"iPhone 6s Plus";
-    if ([deviceString isEqualToString:@"iPhone8,4"]) return @"iPhone SE";
-    if ([deviceString isEqualToString:@"iPhone9,1"]) return @"iPhone 7";
-    if ([deviceString isEqualToString:@"iPhone9,2"]) return @"iPhone 7 Plus";
-    if ([deviceString isEqualToString:@"iPhone9,3"]) return @"iPhone 7";
-    if ([deviceString isEqualToString:@"iPhone9,4"]) return @"iPhone 7 Plus";
-    if ([deviceString isEqualToString:@"iPhone10,1"]) return @"iPhone 8";
-    if ([deviceString isEqualToString:@"iPhone10,2"]) return @"iPhone 8";
-    if ([deviceString isEqualToString:@"iPhone10,3"]) return @"iPhone X";
-    if ([deviceString isEqualToString:@"iPhone10,4"]) return @"iPhone 8";
-    if ([deviceString isEqualToString:@"iPhone10,5"]) return @"iPhone 8";
-    if ([deviceString isEqualToString:@"iPhone10,6"]) return @"iPhone X";
+    if ([deviceString isEqualToString:@"iPhone8,4"])    return @"iPhone SE";
+    if ([deviceString isEqualToString:@"iPhone9,1"])    return @"iPhone 7";
+    if ([deviceString isEqualToString:@"iPhone9,2"])    return @"iPhone 7 Plus";
+    if ([deviceString isEqualToString:@"iPhone9,3"])    return @"iPhone 7";
+    if ([deviceString isEqualToString:@"iPhone9,4"])    return @"iPhone 7 Plus";
+    if ([deviceString isEqualToString:@"iPhone10,1"])   return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,2"])   return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,3"])   return @"iPhone X";
+    if ([deviceString isEqualToString:@"iPhone10,4"])   return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,5"])   return @"iPhone 8";
+    if ([deviceString isEqualToString:@"iPhone10,6"])   return @"iPhone X";
     
     //iPad
     if ([deviceString isEqualToString:@"iPad1,1"])      return @"iPad";
@@ -379,6 +379,14 @@ static const char* jailbreak_apps[] =
     if ([deviceString isEqualToString:@"iPad2,5"])      return @"iPad mini (WiFi)";
     if ([deviceString isEqualToString:@"iPad2,6"])      return @"iPad mini (GSM)";
     if ([deviceString isEqualToString:@"iPad2,7"])      return @"iPad mini (CDMA)";
+    if ([deviceString isEqualToString:@"iPad4,4"])      return @"iPad mini 2";
+    if ([deviceString isEqualToString:@"iPad4,5"])      return @"iPad mini 2";
+    if ([deviceString isEqualToString:@"iPad4,6"])      return @"iPad mini 2";
+    if ([deviceString isEqualToString:@"iPad4,7"])      return @"iPad mini 3";
+    if ([deviceString isEqualToString:@"iPad4,8"])      return @"iPad mini 3";
+    if ([deviceString isEqualToString:@"iPad5,1"])      return @"iPad mini 4";
+    if ([deviceString isEqualToString:@"iPad5,2"])      return @"iPad mini 4";
+    
     
     if ([deviceString isEqualToString:@"iPad3,1"])      return @"iPad 3(WiFi)";
     if ([deviceString isEqualToString:@"iPad3,2"])      return @"iPad 3(CDMA)";
@@ -392,15 +400,23 @@ static const char* jailbreak_apps[] =
     if ([deviceString isEqualToString:@"iPad4,3"])      return @"iPad Air";
     if ([deviceString isEqualToString:@"iPad5,3"])      return @"iPad Air 2";
     if ([deviceString isEqualToString:@"iPad5,4"])      return @"iPad Air 2";
+    
+    if ([deviceString isEqualToString:@"iPad6,3"])      return @"iPad Pro (9.7-inch)";
+    if ([deviceString isEqualToString:@"iPad6,4"])      return @"iPad Pro (9.7-inch)";
+    if ([deviceString isEqualToString:@"iPad6,7"])      return @"iPad Pro (12.9-inch)";
+    if ([deviceString isEqualToString:@"iPad6,8"])      return @"iPad Pro (12.9-inch)";
+    if ([deviceString isEqualToString:@"iPad6,11"])     return @"iPad (5th generation)";
+    if ([deviceString isEqualToString:@"iPad6,12"])     return @"iPad (5th generation)";
+    if ([deviceString isEqualToString:@"iPad7,1"])      return @"iPad Pro (12.9-inch, 2nd generation)";
+    if ([deviceString isEqualToString:@"iPad7,2"])      return @"iPad Pro (12.9-inch, 2nd generation)";
+    if ([deviceString isEqualToString:@"iPad7,3"])      return @"iPad Pro (10.5-inch)";
+    if ([deviceString isEqualToString:@"iPad7,4"])      return @"iPad Pro (10.5-inch)";
+    if ([deviceString isEqualToString:@"iPad7,5"])      return @"iPad (6th generation)";
+    if ([deviceString isEqualToString:@"iPad7,6"])      return @"iPad (6th generation)";
+    
     if ([deviceString isEqualToString:@"i386"])         return @"Simulator";
     if ([deviceString isEqualToString:@"x86_64"])       return @"Simulator";
     
-    if ([deviceString isEqualToString:@"iPad4,4"]||[deviceString isEqualToString:@"iPad4,5"]||[deviceString isEqualToString:@"iPad4,5"]||[deviceString isEqualToString:@"iPad4,6"]) {
-        return @"iPad mini 2";
-    }
-    if ([deviceString isEqualToString:@"iPad4,7"]||[deviceString isEqualToString:@"iPad4,8"]||[deviceString isEqualToString:@"iPad4,9"]){
-        return @"iPad mini 3";
-    }
     
     return deviceString;
 }
@@ -426,7 +442,7 @@ static const char* jailbreak_apps[] =
 
 //getMainBundleMD5WithFlag方法为试验性的代码，上线时谨慎使用
 //flag 为1：每个文件的MD5追加存到同一个文件里，最后读取这个文件计算MD5.
-//flag 为2：每个文件的MD5追加存到同一个NSMutableString对象，再对这个对象内容计算MD5。如果文件很多，例如2000多个文件，NSMutableString对象会占用比较大的内存，再加上程序可用内存又不够多的话，恐怕会有问题。（在ios4.3设备上测试计算1200多个文件的MD5，暂时还没出现问题）
+//flag 为2：每个文件的MD5追加存到同一个NSMutableString对象，再对这个对象内容计算MD5。如果文件很多，例如2000多个文件，NSMutableString对象会占用比较大的内存，再加上程序可用内存又不够多的话，虽然用我手头的iPhone 7测试没有问题，但是恐怕内存不够用产生问题。
 -(NSString*)getMainBundleMD5WithFlag:(NSInteger)flag
 {
     if(flag!=1 && flag!=2){
@@ -522,7 +538,7 @@ static const char* jailbreak_apps[] =
     
     //    NSLog(@"MD5 = %@",MD5);
     if(MD5 == nil)
-        MD5 = @"";
+    MD5 = @"";
     
     return MD5;
 }
@@ -534,16 +550,12 @@ static const char* jailbreak_apps[] =
     NSArray *contentOfFolder = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirString error:&error];
     
     if(error)
-        return;
+    return;
     
     for (NSString *fileName in contentOfFolder) {
-        
         NSString * fullPath = [dirString stringByAppendingPathComponent:fileName];
-        
         BOOL isDir;
-        
         if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath isDirectory:&isDir] && !isDir){
-            
             // ignore .DS_Store,忽略隐藏文件
             //说明:计算太多文件的MD5，会影响程序启动速度，在此可以根据需要忽略掉一些文件，比如图片文件
             if (![[fileName substringToIndex:1] isEqualToString:@"."]
@@ -565,7 +577,6 @@ static const char* jailbreak_apps[] =
                 [self allFilesAtPath:fullPath];
             }
         }
-        
     }
 }
 
@@ -579,15 +590,9 @@ static const char* jailbreak_apps[] =
     
     int success = 0;
     
-    
-    
     success = getifaddrs(&interfaces);
     
-    
-    
     if (success == 0) { // 0 表示获取成功
-        
-        
         
         temp_addr = interfaces;
         
@@ -700,11 +705,9 @@ static const char* jailbreak_apps[] =
     
 }
 
-
 + (NSString *)getDeviceLanguage {
     
     NSArray *languageArray = [NSLocale preferredLanguages];
-    
     return [languageArray objectAtIndex:0];
     
 }
