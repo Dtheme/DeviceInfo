@@ -206,11 +206,21 @@ static const char* jailbreak_apps[] =
 + (NSString *)getDeviceDisplayMetrics {
     NSString *DisplayMetrics;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (IPHONE5) {
+        if (IPHONE5)
+        {
             DisplayMetrics=@"1136*640";
         }
-        if ([DeviceInfo iPhoneX]) {
+        if ([DeviceInfo iPhoneX]||
+            [[DeviceInfo deviceTypeDetail] isEqualToString:@"iPhone XS"])
+        {
             DisplayMetrics = @"2436*1125";
+        }
+        if ([[DeviceInfo deviceTypeDetail] isEqualToString:@"iPhone XR"])
+        {
+            DisplayMetrics = @"1792*828";
+        }
+        if ([[DeviceInfo deviceTypeDetail]isEqualToString:@"iPhone XS Max"]) {
+            DisplayMetrics = @"1242*2688";
         }
         if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
             ([UIScreen mainScreen].scale == 2.0)) {
@@ -315,7 +325,7 @@ static const char* jailbreak_apps[] =
     }
     else
     {
-        //所有iOS7设备mac地址都返回020000000000,在此直接用UUIDString代替
+        //所有iOS7之后设备mac地址都返回020000000000,在此直接用UUIDString代替
         
         //96FEADAA-884B-405A-A382-9E275FC15580
         NSString *UUIDString = [[[UIDevice currentDevice]identifierForVendor]UUIDString];
@@ -368,6 +378,11 @@ static const char* jailbreak_apps[] =
     if ([deviceString isEqualToString:@"iPhone10,4"])   return @"iPhone 8";
     if ([deviceString isEqualToString:@"iPhone10,5"])   return @"iPhone 8";
     if ([deviceString isEqualToString:@"iPhone10,6"])   return @"iPhone X";
+    
+    if ([deviceString isEqualToString:@"iPhone11,8"])   return @"iPhone XR";
+    if ([deviceString isEqualToString:@"iPhone11,2"])   return @"iPhone XS";
+    if ([deviceString isEqualToString:@"iPhone11,4"])   return @"iPhone XS Max";
+        if ([deviceString isEqualToString:@"iPhone11,6"])   return @"iPhone XS Max";
     
     //iPad
     if ([deviceString isEqualToString:@"iPad1,1"])      return @"iPad";
