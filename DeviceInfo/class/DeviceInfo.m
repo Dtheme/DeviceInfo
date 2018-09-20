@@ -32,8 +32,9 @@
 @end
 
 @implementation DeviceInfo
-//@synthesize dirFileList;
 
+
+//
 static const char* jailbreak_apps[] =
 {
     "/Applications/Cydia.app",

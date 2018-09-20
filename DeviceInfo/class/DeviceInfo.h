@@ -15,7 +15,6 @@
 // 返回本类提供的所有设备信息
 + (NSDictionary *)deviceInfo;
 
-
 /**
  executablePath 和 其进行MD5加密后的值
 
