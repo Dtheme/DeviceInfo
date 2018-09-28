@@ -13,7 +13,6 @@
 		9625108F1F286C9A0031FEE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9625108E1F286C9A0031FEE4 /* Assets.xcassets */; };
 		962510921F286C9A0031FEE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 962510901F286C9A0031FEE4 /* LaunchScreen.storyboard */; };
 		9625109D1F286C9A0031FEE4 /* DeviceInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9625109C1F286C9A0031FEE4 /* DeviceInfoTests.m */; };
-		962510A81F286C9A0031FEE4 /* DeviceInfoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 962510A71F286C9A0031FEE4 /* DeviceInfoUITests.m */; };
 		962510FD1F2893DA0031FEE4 /* DeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 962510FC1F2893DA0031FEE4 /* DeviceInfo.m */; };
 /* End PBXBuildFile section */
 
@@ -48,8 +47,6 @@
 		9625109C1F286C9A0031FEE4 /* DeviceInfoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoTests.m; sourceTree = "<group>"; };
 		9625109E1F286C9A0031FEE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		962510A31F286C9A0031FEE4 /* DeviceInfoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeviceInfoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		962510A71F286C9A0031FEE4 /* DeviceInfoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoUITests.m; sourceTree = "<group>"; };
-		962510A91F286C9A0031FEE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		962510FB1F2893DA0031FEE4 /* DeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfo.h; sourceTree = "<group>"; };
 		962510FC1F2893DA0031FEE4 /* DeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,7 +81,6 @@
 			children = (
 				962510811F286C9A0031FEE4 /* DeviceInfo */,
 				9625109B1F286C9A0031FEE4 /* DeviceInfoTests */,
-				962510A61F286C9A0031FEE4 /* DeviceInfoUITests */,
 				962510801F286C9A0031FEE4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,15 +126,6 @@
 				9625109E1F286C9A0031FEE4 /* Info.plist */,
 			);
 			path = DeviceInfoTests;
-			sourceTree = "<group>";
-		};
-		962510A61F286C9A0031FEE4 /* DeviceInfoUITests */ = {
-			isa = PBXGroup;
-			children = (
-				962510A71F286C9A0031FEE4 /* DeviceInfoUITests.m */,
-				962510A91F286C9A0031FEE4 /* Info.plist */,
-			);
-			path = DeviceInfoUITests;
 			sourceTree = "<group>";
 		};
 		962510FA1F2893DA0031FEE4 /* class */ = {
@@ -304,7 +291,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				962510A81F286C9A0031FEE4 /* DeviceInfoUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

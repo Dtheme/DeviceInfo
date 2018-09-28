@@ -38,7 +38,6 @@
  @return Mac地址
  */
 + (NSString *)getMacAddress;
-//- (NSString*)getMainBundleMD5WithFlag:(NSInteger)flag;
 
 
 /**

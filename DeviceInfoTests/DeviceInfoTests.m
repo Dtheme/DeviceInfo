@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "DeviceInfo.h"
 
 @interface DeviceInfoTests : XCTestCase
 
@@ -24,16 +25,28 @@
     [super tearDown];
 }
 
+#pragma mark - test
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        NSDictionary *dict = [DeviceInfo deviceInfo];
+        NSLog(@"%@",dict);
     }];
 }
+
+-(void)testExecutablePathAndMD5Value{
+    [self measureBlock:^{
+        NSArray *arr = [DeviceInfo executablePathAndMD5Value];
+        NSLog(@"%@",[arr copy]);
+    }];
+}
+
+
+
+
+#pragma mark - test case
+
+
 
 @end
