@@ -1,7 +1,7 @@
 # DeviceInfo 
 
 
-## 获取iOS设备的设备信息
+ 获取iOS设备的设备信息
 
  Get iOS device Infomation,This utility class is used to obtain some common device information.
 
