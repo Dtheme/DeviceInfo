@@ -184,23 +184,24 @@ static const char* jailbreak_apps[] =
 }
 +(NSDictionary *)deviceInfo
 {
-    NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+    NSMutableDictionary *deviceInfo=[[NSMutableDictionary alloc]init];
     NSString *deviceType = [DeviceInfo deviceTypeDetail];
     
     NSString *OSVersion = [NSString stringWithFormat:@"%@ %@",[[UIDevice currentDevice] systemName],[[UIDevice currentDevice] systemVersion]];
-    [dic setObject:deviceType forKey:@"DeviceType"];
-    [dic setObject:OSVersion forKey:@"DeviceOsType"];
-    [dic setObject:[self getMacAddress] forKey:@"DeviceMac"];
-    [dic setObject:[UIDevice currentDevice].model forKey:@"DeviceModel"];
-    [dic setObject:[self getDeviceDisplayMetrics] forKey:@"DeviceMetrics"];
-    [dic setObject:[DeviceInfo cpuArchitectures] forKey:@"CPUArchitecture"];
-    [dic setObject:[DeviceInfo getBundleID] forKey:@"BundleID"];
-    [dic setObject:[DeviceInfo getLocalAppVersion] forKey:@"AppVersion"];
-    [dic setObject:[DeviceInfo getApplicationName] forKey:@"AppName"];
-    [dic setObject:[DeviceInfo getDeviceIPAdress] forKey:@"IP"];
-    [dic setObject:@([DeviceInfo getBatteryLevel]) forKey:@"BatteryLevel"];
-    [dic setObject:[DeviceInfo getBatteryState] forKey:@"BatteryState"];
-    return dic;
+    [deviceInfo setObject:deviceType forKey:@"DeviceType"];
+    [deviceInfo setObject:OSVersion forKey:@"DeviceOsType"];
+    [deviceInfo setObject:[self getMacAddress] forKey:@"DeviceMac"];
+    [deviceInfo setObject:[UIDevice currentDevice].model forKey:@"DeviceModel"];
+    [deviceInfo setObject:[self getDeviceDisplayMetrics] forKey:@"DeviceMetrics"];
+    [deviceInfo setObject:[DeviceInfo cpuArchitectures] forKey:@"CPUArchitecture"];
+    [deviceInfo setObject:[DeviceInfo getBundleID] forKey:@"BundleID"];
+    [deviceInfo setObject:[DeviceInfo getLocalAppVersion] forKey:@"AppVersion"];
+    [deviceInfo setObject:[DeviceInfo getApplicationName] forKey:@"AppName"];
+    [deviceInfo setObject:[DeviceInfo getDeviceIPAdress] forKey:@"IP"];
+    [deviceInfo setObject:@([DeviceInfo getBatteryLevel]) forKey:@"BatteryLevel"];
+    [deviceInfo setObject:[DeviceInfo getBatteryState] forKey:@"BatteryState"];
+    [deviceInfo setObject:[DeviceInfo keyChainUUID] forKey:@"UUID"];
+    return deviceInfo;
 }
 
 
@@ -549,17 +550,12 @@ static const char* jailbreak_apps[] =
     NSString *MD5;
     if(flag == 1)
     {
-        //关闭写文件
         [outFile closeFile];
-        //读文件MD5
         MD5 = [DeviceInfo fileMD5:filePath];
-        //取得MD5后，马上删除文件
         [defaultManager removeItemAtPath:filePath error:nil];
         
     }else
     {
-        //NSLog(@"allFilesMD5string = %@",allFilesMD5string);
-        //读数据MD5
         MD5 = [DeviceInfo dataMD5:allFilesMD5string];
     }
     
@@ -740,4 +736,79 @@ static const char* jailbreak_apps[] =
     
 }
 
++ (NSString *)keychainUUID {
+    
+    NSString *getUDIDInKeychain = (NSString *)[DeviceInfo load:[[NSBundle mainBundle]bundleIdentifier]];
+    
+    if (!getUDIDInKeychain || [getUDIDInKeychain isEqualToString:@""] || [getUDIDInKeychain isKindOfClass:[NSNull class]]) {
+        
+        CFUUIDRef puuid = CFUUIDCreate(nil);
+        CFStringRef uuidString = CFUUIDCreateString(nil, puuid);
+        NSString *result = (NSString *)CFBridgingRelease(CFStringCreateCopy(NULL, uuidString));
+        CFRelease(puuid);
+        CFRelease(uuidString);
+        
+        [DeviceInfo save:[[NSBundle mainBundle]bundleIdentifier] data:result];
+        getUDIDInKeychain = (NSString *)[DeviceInfo load:[[NSBundle mainBundle]bundleIdentifier]];
+    }
+    
+    return getUDIDInKeychain;
+}
+
++ (void)removeKeyChainUUID {
+    
+    NSMutableDictionary *keychainQuery = [self getKeyChainQuery:[[NSBundle mainBundle]bundleIdentifier]];
+    SecItemDelete((CFDictionaryRef)keychainQuery);
+    
+}
+
++ (NSMutableDictionary *)getKeyChainQuery:(NSString *)service {
+    
+    return [NSMutableDictionary dictionaryWithObjectsAndKeys:(id)kSecClassGenericPassword,(id)kSecClass,service,(id)kSecAttrService,service,(id)kSecAttrAccount,(id)kSecAttrAccessibleAfterFirstUnlock,(id)kSecAttrAccessible, nil];
+}
+
++ (id)load:(NSString *)service {
+    
+    id ret = nil;
+    
+    NSMutableDictionary *keychainQuery = [self getKeyChainQuery:service];
+    [keychainQuery setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
+    [keychainQuery setObject:(id)kSecMatchLimitOne forKey:(id)kSecMatchLimit];
+    CFDataRef keyData = NULL;
+    
+    if (SecItemCopyMatching((CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
+        @try {
+            ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Unarchive of %@ failed: %@", service, exception);
+        }
+        @finally {
+        }
+    }
+    
+    if (keyData) {
+        CFRelease(keyData);
+    }
+    
+    return ret;
+}
+
++ (void)save:(NSString *)service data:(id)data {
+    
+    NSMutableDictionary *keychainQuery = [self getKeyChainQuery:service];
+    SecItemDelete((CFDictionaryRef)keychainQuery);
+    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:data] forKey:(id)kSecValueData];
+    SecItemAdd((CFDictionaryRef)keychainQuery, NULL);
+    
+}
+
++ (NSString *)originUUID {
+    
+    CFUUIDRef puuid = CFUUIDCreate( nil );
+    CFStringRef uuidString = CFUUIDCreateString(nil, puuid);
+    NSString *result = (NSString *)CFBridgingRelease(CFStringCreateCopy( NULL, uuidString));
+    
+    return result;
+}
 @end

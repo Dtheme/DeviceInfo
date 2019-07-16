@@ -91,4 +91,17 @@
  */
 + (NSString *)getDeviceLanguage;
 
+
+/**
+ * 获取UUID后存入的keychain
+ * 使用keychain实现唯一UUID的一种方案
+ * @return keychain中存储的UUID
+ */
++ (NSString *)keyChainUUID;
+
+/**
+ * 删除keychain中的UUID
+ * 如果删除后，重新获取用户的UUID会与之前的UUID不同
+ */
++ (void)removeKeyChainUUID;
 @end
