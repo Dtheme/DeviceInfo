@@ -24,10 +24,6 @@
 
 `+ (NSString *)getMacAddress;`
 
-获取设备的Mac地址
-
-`+ (NSString *)getDeviceIPAdress;`
-
 获取设备当前IP
 
 `+ (NSString *)getDeviceLanguage;`
