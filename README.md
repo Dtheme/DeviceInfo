@@ -60,7 +60,6 @@ app名称
  NSLog(@"deviceInfo-->%@",[DeviceInfo deviceInfo]);
  NSLog(@"executablePathMD5-->%@",[DeviceInfo executablePathAndMD5Value]);
  NSLog(@"isJailBrojen-->%d",[DeviceInfo isJailBrojen]);
- NSLog(@"MacAddress-->%@",[DeviceInfo getMacAddress]);
 ```
 
 
